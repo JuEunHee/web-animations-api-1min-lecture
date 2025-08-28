@@ -15,9 +15,34 @@
 </head>
 <body>
 	<div class="box"></div>
-	
+
 	<script>
-		
+    // 애니메이션 끝난 시점 후 제어를 위해 javascript animationend 대신에 promise 사용 가능
+		const box = document.querySelector('.box');
+
+    const animation = box.animate(
+      [
+        { transform: 'translateX(0)', opacity: 0, offset: 0 },
+        { transform: 'translateX(-50px)', opacity: 1, offset: 0.6 },
+        { transform: 'translateX(300px)', opacity: 0.5, offset: 1 }
+      ],
+      {
+        duration: 2000,
+        easing: 'linear',
+        fill: 'forwards',
+        iterations: 3,
+        direction: 'alternate'
+      }
+    );
+
+    // console.log(animation.finished); // Animation 객체가 Promise 객체를 반환
+    animation.finished.then(() => {
+      console.log('애니메이션 끝!');
+    });
+
+    animation.ready.then(() => {
+      console.log('애니메이션 시작!');
+    });
 	</script>
 </body>
 </html>

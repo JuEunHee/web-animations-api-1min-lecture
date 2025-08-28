@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Web Animation API</title>
+	<style>
+		.box {
+			width: 100px;
+			height: 100px;
+			background: dodgerblue;
+		}
+	</style>
+</head>
+<body>
+	<div class="box"></div>
+
+	<script>
+		const box = document.querySelector('.box');
+
+    // CASE 1: 이게 간소화시킨 버전이고, 원래는 Animation 생성자로 생성 가능
+    // const animation = box.animate(
+    //   [
+    //     { transform: 'translateX(0)', opacity: 0, offset: 0 },
+    //     { transform: 'translateX(-50px)', opacity: 1, offset: 0.6 },
+    //     { transform: 'translateX(300px)', opacity: 0.5, offset: 1 }
+    //   ],
+    //   {
+    //     duration: 2000,
+    //     easing: 'linear',
+    //     fill: 'forwards',
+    //     iterations: 3,
+    //     direction: 'alternate'
+    //   }
+    // );
+
+    // CASE 2: Animation 생성자로 생성하는 방법
+    const animation = new Animation(
+      new keyframeEffect(
+        // 첫번째 인자 : 애니메이션을 적용할 object
+        box,
+
+        // 두번째 인자 : keyframe 설정
+        [
+          { transform: 'translateX(0)', opacity: 0, offset: 0 },
+          { transform: 'translateX(-50px)', opacity: 1, offset: 0.6 },
+          { transform: 'translateX(300px)', opacity: 0.5, offset: 1 }
+        ],
+
+        // 세번째 인자 : timing 관련 옵션
+        {
+          duration: 2000,
+          easing: 'linear',
+          fill: 'forwards',
+          iterations: 3,
+          direction: 'alternate'
+        }
+      )
+    )
+    animation.play(); // play() 메서드로 재생. 간소화 버전과 달리 자동으로 시작하지 않음
+	</script>
+</body>
+</html>
