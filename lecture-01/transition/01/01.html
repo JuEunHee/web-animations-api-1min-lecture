@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background: coral;
+            /*
+              transition: 아래의 축약어
+
+              - transition-duration
+              - transition-timing-function
+              - transition-delay
+              - transition-property
+            */
+
+            /* transition 1s 2s => duration delay */
+
+            /*
+              inspector에서 transition 오른쪽 보라색 아이콘을 이용해
+              cubic-bezier 곡선을 직접 설정할 수 있다.
+            */
+            transition:
+              1s cubic-bezier(0.6,-0.4, 0.3, 1.48),
+              background 2s 1s linear;
+        }
+
+        .box-action {
+            transform: translateX(300px);
+            background: blue;
+        }
+
+        /* .box:hover {
+            transform: scale(2);
+        } */
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+    <div class="message"></div>
+
+    <script>
+        // transitionstart
+        // transitionend
+        // transitionrun
+        // transitioncancel
+
+        const box = document.querySelector('.box');
+        const message = document.querySelector('.message');
+
+        // 트랜지션이 진행 중인지 여부를 추적해서 실행중일때는 발동 금지
+        let isTransitionRunning = false;
+
+        box.addEventListener('click', () => {
+          if (!isTransitionRunning) {
+            box.classList.toggle('box-action');
+          }
+
+          isTransitionRunning = true;
+
+          // cancel test
+          setTimeout(() => {
+            box.remove();
+          }, 500);
+        });
+
+        // 발동된 그 상태
+        box.addEventListener('transitionrun', (e) => {
+            console.log(`${e.propertyName} RUN`);
+        });
+        // 시작되는 순간
+        box.addEventListener('transitionstart', (e) => {
+            console.log(`${e.propertyName} START`);
+            message.innerHTML = 'START'
+        });
+        // 끝나는 순간
+        box.addEventListener('transitionend', (e) => {
+            console.log(`${e.propertyName} END`);
+            message.innerHTML = 'END'
+
+            isTransitionRunning = false;
+        });
+        // 취소되는 순간
+        box.addEventListener('transitioncancel', (e) => {
+            console.log(`${e.propertyName} CANCEL`);
+
+            message.innerHTML = 'CANCEL'
+        });
+    </script>
+</body>
+</html>
