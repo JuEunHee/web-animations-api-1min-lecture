@@ -34,19 +34,10 @@
 	<script type="module">
     import Star from './Star.js';
 
-    // 3차원 원근값 결정 : 별이 다가오면서 커지도록 위치에 따라 다시 결정되어야함
-    function set3DPoint(x, y, z) {
-      const scale = zModifier / (zModifier + z);
-
-      // scale 자체가 z값에 따라 결정됨. 이 값에 맞게 x, y값도 변경하겠다는 것.
-      const x2D = x * scale;
-      const y2D = y * scale;
-
-      return [x2D, y2D, scale]; // 3D가 아니라서 z값은 안넘겨줘도 됨
-    }
-
     const numberOfStars = 200; // 별의 개수
-    const zModifier = window.innerHeight; // 위치값을 계속 변경해줄거기때문에 변수로 빼줌
+    const canvasWidth = window.innerWidth;
+    const canvasHeight = window.innerHeight;
+    const zModifier = canvasHeight; // 위치값을 계속 변경해줄거기때문에 변수로 빼줌
     const effects = [];
 
     let x, y, z; // 별의 위치 결정
@@ -55,10 +46,24 @@
     let pointFrom, pointTo;
     let star;
 
+    // 3차원 원근값 결정 : 별이 다가오면서 커지도록 위치에 따라 다시 결정되어야함
+    function set3DPoint(x, y, z) {
+      const scale = zModifier / (zModifier + z);
+
+      // scale 자체가 z값에 따라 결정됨. 이 값에 맞게 x, y값도 변경하겠다는 것.
+      const x2D = x * scale + window.innerWidth*0.5;
+      const y2D = y * scale + window.innerWidth*0.5;
+
+      return [x2D, y2D, scale]; // 3D가 아니라서 z값은 안넘겨줘도 됨
+    }
+
     for (let i = 0; i < numberOfStars; i++) {
-      x = (Math.random() * window.innerWidth); // 브라우저 너비 안에서 세팅되도록
-      y = (Math.random() * window.innerHeight); // 브라우저 높이 안에서 세팅되도록
+      // 가운데를 0으로 잡아서 ex)기존 0~1000에서 -500~500으로 변경
+      x = (Math.random() * window.innerWidth - window.innerWidth*0.5); // 브라우저 너비 안에서 세팅되도록
+      y = (Math.random() * window.innerHeight - window.innerHeight*0.5); // 브라우저 높이 안에서 세팅되도록
       z = (Math.random() * zModifier);
+
+      scale = zModifier / (zModifier + z);
 
       pointFrom = set3DPoint(x, y, z);
       pointTo = set3DPoint(x, y, z - zModifier); // -값이 될수록 가까워지는거니까, zModifier만큼 가까워지도록
@@ -81,13 +86,13 @@
       ]
 
       options = {
-        duration: 1000,
+        // 한번에 촥 촥 펴졌다가 돌아가는 부자연스러움 해결을 위해 duration 제공
+        // -> scale에 반비례하게 해줌.
+        duration: 1000 / scale,
         iterations: Infinity,
         fill: 'both',
         easing: 'linear' // 가속 옵션 : 일정하게
       }
-
-      console.log(keyframes)
 
       effects.push(new KeyframeEffect(star.element, keyframes, options));
     }
