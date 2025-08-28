@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Starfield</title>
+	<style>
+		body {
+			overflow: hidden;
+			background-color: black;
+		}
+
+		.star {
+			position: absolute;
+			width: 3px;
+			height: 3px;
+			font-size: 0;
+			border-radius: 50%;
+			background: white;
+		}
+	</style>
+</head>
+<body>
+	<div class="starfield"></div>
+
+  <!-- GroupEffect, SequanceEffect 사용 가능한 라이브러리 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.2/web-animations-next.min.js"></script>
+  <!--
+    스타워즈 모듈 import 가능.
+    모듈 사용 시 장점:
+      - script영역에 직접 변수를 선언 시 글로벌 변수가 되는것에 비해,
+      - 자체적으로 스코프가 생겨서 전역에서 접근이 안되는 점이 장점
+  -->
+	<script type="module">
+    import Star from './Star.js';
+
+    const numberOfStars = 200;
+    const zModifier = window.innerHeight; // 위치값을 계속 변경해줄거기때문에 변수로 빼줌
+
+    let x, y, z;
+    for (let i = 0; i < numberOfStars; i++) {
+      x = (Math.random() * window.innerWidth); // 브라우저 너비 안에서 세팅되도록
+      y = (Math.random() * window.innerHeight); // 브라우저 높이 안에서 세팅되도록
+      z = (Math.random() * zModifier)
+
+      console.log(x);
+
+      new Star(i, x, y);
+    }
+	</script>
+</body>
+</html>

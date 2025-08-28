@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>각각의 객체에 애니메이션 적용하기</title>
+	<style>
+		.bar-container {
+			display: flex;
+			align-items: flex-end;
+		}
+		.bar {
+			width: 10px;
+			height: 200px;
+			margin: 0 10px;
+			background-color: lightgray;
+			transform-origin: bottom;
+			will-change: transform;
+		}
+		.bar:nth-child(5n+1) { background-color:crimson; }
+		.bar:nth-child(5n+2) { background-color: gold; }
+		.bar:nth-child(5n+3) { background-color: forestgreen; }
+		.bar:nth-child(5n+4) { background-color: dodgerblue; }
+		.bar:nth-child(5n+5) { background-color: darkorchid; }
+	</style>
+</head>
+<body>
+	<div class="bar-container"></div>
+
+  <!--
+    * @see cdnjs.com/package/web-animations
+    * 위의 cdnjs를 통해 유명한 라이브러리를 불러올 수 있습니다.
+
+    * Group Effect로 애니메이션 적용하기 스펙 불러옴
+  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.2/web-animations-next.min.js"></script>
+	<script>
+    // Group Effect로 애니메이션 적용하기
+		const barContainer = document.querySelector('.bar-container');
+    const bars = [];
+
+    for (let i = 0; i < 30; i++) {
+      bar = document.createElement('div');
+      bar.classList.add('bar');
+      barContainer.appendChild(bar);
+      bars.push(bar);
+    }
+
+    const keyframes = [
+      { transform: 'scaleY(0)' },
+      { transform: 'scaleY(1)' }
+    ];
+
+    const options = {
+      duration: 3000,
+      iterations: Infinity,
+      direction: 'alternate',
+      fill: 'both',
+      easing: 'ease-in-out'
+    }
+
+    const effects = [];
+
+    bars.forEach((bar, index) => {
+      const newOption = { ...options, delay: index * 200 };
+      const effect = new KeyframeEffect(bar, keyframes, newOption);
+      effects.push(effect);
+    });
+
+    const groupEffect = new GroupEffect(effects);
+    console.log(groupEffect);
+    const animation = document.timeline.play(groupEffect);
+
+    // 기존
+    // bars.forEach((bar, index) => {
+    //   bar.animate(keyframes, { ...options, delay: index * 200 });
+    // });
+
+    // 3초 후에 애니메이션 멈추기
+    // window.setTimeout(() => {
+    //   animation.pause();
+    // }, 3000);
+	</script>
+
+  <!-- // 지난 시간 참조: Animation 생성자로 생성하는 방법 - "KeyframeEffect"
+
+    눈이 온다고 치면 각각의 눈 파티클들을 keyframeEffect로 만들고,
+    이걸 모아서 GroupEffect로 묶은 다음에 Animation 생성자로 재생할 수 있음
+
+    const animation = new Animation(
+      new keyframeEffect(
+        box,
+        keyframes,
+        timingOptions
+      )
+    )
+    animation.play(); -->
+</body>
+</html>
