@@ -34,18 +34,21 @@
 	<script type="module">
     import Star from './Star.js';
 
-    const numberOfStars = 200;
+    const numberOfStars = 200; // 별의 개수
     const zModifier = window.innerHeight; // 위치값을 계속 변경해줄거기때문에 변수로 빼줌
 
-    let x, y, z;
+    let x, y, z; // 별의 위치 결정
+    let scale; // 별의 크기 결정
+
     for (let i = 0; i < numberOfStars; i++) {
       x = (Math.random() * window.innerWidth); // 브라우저 너비 안에서 세팅되도록
       y = (Math.random() * window.innerHeight); // 브라우저 높이 안에서 세팅되도록
       z = (Math.random() * zModifier)
+      scale = zModifier / (zModifier + z); // z값이 커질수록 분모값이 커져 결과적으로 scale이 작아짐. 0.몇으로 나눠줌
 
-      console.log(x);
+      console.log(z, scale);
 
-      new Star(i, x, y);
+      new Star(i, x, y, scale);
     }
 	</script>
 </body>
