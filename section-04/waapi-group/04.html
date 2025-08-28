@@ -7,17 +7,23 @@
 	<style>
 		body {
 			overflow: hidden;
-			background-color: black;
+			background-color: gold;
 		}
 
 		.star {
 			position: absolute;
 			width: 3px;
 			height: 3px;
-			font-size: 0;
+			/* font-size: 0; */
 			border-radius: 50%;
-			background: white;
+			background: black;
 		}
+
+		.star:nth-child(20n) {
+      width: 50px;
+      height: 50px;
+      background: url('./ilbuni-yoga.png') no-repeat 0 0 / cover
+    }
 	</style>
 </head>
 <body>
@@ -99,6 +105,15 @@
 
     const groupEffect = new GroupEffect(effects);
     const animation = document.timeline.play(groupEffect);
+
+    // 클릭 시 재생 여부 토글하는 기능 추가
+    window.addEventListener('click', () => {
+      if (animation.playState === 'running') {
+        animation.pause();
+      } else {
+        animation.play();
+      }
+    })
 	</script>
 </body>
 </html>
