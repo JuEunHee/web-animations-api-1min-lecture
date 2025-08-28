@@ -62,6 +62,10 @@
 			console.log(`${e.animationName} CANCEL`);
 			message.innerText = 'CANCEL';
 		});
+
+    setTimeout(() => {
+      ball.remove();
+    }, 2000);
   </script>
 </body>
 </html>
